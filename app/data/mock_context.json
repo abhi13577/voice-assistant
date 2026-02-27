@@ -1,0 +1,15 @@
+{
+  "user_id": 1001,
+  "project_id": 42,
+  "subscription_tier": "pro",
+  "usage": {
+    "test_runs_this_month": 340,
+    "test_run_monthly_limit": 500,
+    "web_chat_count_today": 28,
+    "web_chat_daily_limit": 50
+  },
+  "last_error": {
+    "test_name": "Checkout - Pay with Card",
+    "error_message": "Step 'Click Pay' timed out after 30s"
+  }
+}

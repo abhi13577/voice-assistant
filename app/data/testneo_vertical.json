@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0",
+  "description": "TestNeo L1/L2 voice assistant test data. STT → intent → context → knowledge → TTS. Real schema-aligned data.",
+  "voice_vertical": "check_my_run_status",
+
+  "users": [
+    { "id": 1, "name": "Alex", "email": "alex@example.com" },
+    { "id": 2, "name": "Sam", "email": "sam@example.com" }
+  ],
+
+  "projects": [
+    { "id": 10, "user_id": 1, "name": "E-commerce API" },
+    { "id": 20, "user_id": 1, "name": "E-commerce Web" },
+    { "id": 30, "user_id": 2, "name": "Payment API" }
+  ],
+
+  "test_runs": [
+    {
+      "id": 1001,
+      "user_id": 1,
+      "project_id": 10,
+      "run_id": "run_210_20260217",
+      "name": "Staging Smoke",
+      "status": "completed",
+      "total_tests": 12,
+      "passed_tests": 10,
+      "failed_tests": 2,
+      "started_at": "2026-02-17T10:00:00Z",
+      "completed_at": "2026-02-17T10:02:15Z"
+    },
+    {
+      "id": 1002,
+      "user_id": 1,
+      "project_id": 10,
+      "run_id": "run_211_20260218",
+      "name": "Nightly Regression",
+      "status": "completed",
+      "total_tests": 12,
+      "passed_tests": 12,
+      "failed_tests": 0,
+      "started_at": "2026-02-18T02:00:00Z",
+      "completed_at": "2026-02-18T02:03:00Z"
+    },
+    {
+      "id": 1003,
+      "user_id": 1,
+      "project_id": 20,
+      "run_id": "run_web_301",
+      "name": "Web Regression",
+      "status": "completed",
+      "total_tests": 5,
+      "passed_tests": 4,
+      "failed_tests": 1,
+      "started_at": "2026-02-17T14:00:00Z",
+      "completed_at": "2026-02-17T14:05:30Z"
+    }
+  ],
+
+  "execution_tracking_recent": [
+    {
+      "execution_id": "exec_001",
+      "test_case_id": 301,
+      "project_id": 20,
+      "status": "completed",
+      "duration_ms": 42000,
+      "created_at": "2026-02-17T16:00:00Z"
+    },
+    {
+      "execution_id": "exec_002",
+      "test_case_id": 302,
+      "project_id": 20,
+      "status": "failed",
+      "duration_ms": 55000,
+      "created_at": "2026-02-17T16:01:00Z"
+    }
+  ],
+
+  "sample_utterances": [
+    { "utterance": "What's the status of my last run?", "intent": "check_run_status", "slots": { "which": "last" } },
+    { "utterance": "How did my E-commerce API run go?", "intent": "check_run_status", "slots": { "project": "E-commerce API" } },
+    { "utterance": "Check my run status for E-commerce Web", "intent": "check_run_status", "slots": { "project": "E-commerce Web" } },
+    { "utterance": "Did my nightly run pass?", "intent": "check_run_status", "slots": { "run_name": "nightly" } },
+    { "utterance": "How many tests failed in my last run?", "intent": "check_run_status", "slots": { "which": "last", "detail": "failed_count" } },
+    { "utterance": "List my projects", "intent": "list_projects", "slots": {} },
+    { "utterance": "What projects do I have?", "intent": "list_projects", "slots": {} },
+    { "utterance": "Show my recent test runs", "intent": "list_runs", "slots": {} },
+    { "utterance": "When was my last run for E-commerce API?", "intent": "check_run_status", "slots": { "project": "E-commerce API", "detail": "time" } }
+  ],
+
+  "intent_to_knowledge_query": {
+    "check_run_status": "GET test_runs (and optional execution_tracking) for user; filter by project/run_name/last",
+    "list_projects": "GET projects for user",
+    "list_runs": "GET test_runs for user, ordered by started_at desc"
+  },
+
+  "knowledge_response_examples": {
+    "check_run_status_last": {
+      "user_id": 1,
+      "run": {
+        "run_id": "run_211_20260218",
+        "project_name": "E-commerce API",
+        "name": "Nightly Regression",
+        "status": "completed",
+        "total_tests": 12,
+        "passed_tests": 12,
+        "failed_tests": 0,
+        "started_at": "2026-02-18T02:00:00Z",
+        "completed_at": "2026-02-18T02:03:00Z"
+      }
+    },
+    "check_run_status_by_project": {
+      "user_id": 1,
+      "project_name": "E-commerce Web",
+      "run": {
+        "run_id": "run_web_301",
+        "name": "Web Regression",
+        "status": "completed",
+        "total_tests": 5,
+        "passed_tests": 4,
+        "failed_tests": 1,
+        "started_at": "2026-02-17T14:00:00Z"
+      }
+    },
+    "list_projects": {
+      "user_id": 1,
+      "projects": [
+        { "id": 10, "name": "E-commerce API" },
+        { "id": 20, "name": "E-commerce Web" }
+      ]
+    }
+  },
+
+  "tts_templates": {
+    "check_run_status_success": "Your last run for {project_name} had {passed_tests} passed and {failed_tests} failed. Status: {status}.",
+    "check_run_status_all_passed": "Your run for {project_name} passed. All {total_tests} tests passed.",
+    "list_projects": "You have {count} projects: {project_names}.",
+    "run_not_found": "I couldn't find a run for that project. Say 'list my projects' to hear your projects."
+  },
+
+  "one_vertical_flow": {
+    "name": "check_my_run_status",
+    "steps": [
+      {
+        "step": "STT",
+        "example_input": "What's the status of my last run?",
+        "notes": "User speaks this"
+      },
+      {
+        "step": "intent",
+        "output": "check_run_status",
+        "slots": { "which": "last" }
+      },
+      {
+        "step": "context",
+        "output": "user_id=1 (from auth/session)"
+      },
+      {
+        "step": "knowledge",
+        "action": "Query test_runs for user_id=1 ORDER BY started_at DESC LIMIT 1",
+        "example_response": "knowledge_response_examples.check_run_status_last"
+      },
+      {
+        "step": "TTS",
+        "template": "tts_templates.check_run_status_success",
+        "example_output": "Your last run for E-commerce API had 12 passed and 0 failed. Status: completed."
+      }
+    ]
+  },
+
+  "user_speech_samples": [
+    "What's the status of my last run?",
+    "How did my last test run go?",
+    "Did my E-commerce API run pass?",
+    "How did my E-commerce Web run go?",
+    "Check my run status for E-commerce API",
+    "Tell me about my nightly run",
+    "How many tests failed in my last run?",
+    "Did my regression run pass or fail?",
+    "When was my last run for E-commerce API?",
+    "What's the result of my most recent run?",
+    "List my projects",
+    "What projects do I have?",
+    "Show my projects",
+    "Show my recent test runs",
+    "What runs did I do today?",
+    "List my last five runs",
+    "Hello",
+    "What can you do?",
+    "Help",
+    "Check my run status"
+  ]
+}

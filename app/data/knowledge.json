@@ -1,0 +1,12 @@
+[
+  {
+    "id": "kb_1",
+    "title": "Run limits by plan",
+    "content": "Pro plan includes 500 test runs per month. See Account > Billing for usage."
+  },
+  {
+    "id": "kb_2",
+    "title": "Timeout failure",
+    "content": "Default step timeout is 30 seconds. Increase timeout or add wait step."
+  }
+]
